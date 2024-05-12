@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   server:
     image: dina2505/cloudcomputing:latest

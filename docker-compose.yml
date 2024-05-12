@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  server:
+    build: ./server
+    image: dina2505/cloudcomputing:latest
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URI: "mongodb://mongodb:27017"
+
+  mongodb:
+    image: mongo:7
+    volumes: 
+      - ./data:/data/db  # Corrected volume mapping
+    ports:
+      - "27017:27017"

@@ -6,6 +6,6 @@ COPY . .
 
 RUN go mod tidy
 
-RUN go build -o myapp ./cmd
+RUN go build -o myapp 
 
 CMD ["./myapp"]

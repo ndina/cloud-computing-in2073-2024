@@ -10,8 +10,11 @@ services:
       DATABASE_URI: "mongodb://mongodb:27017"
 
   mongodb:
-    image: mongo:7
+    image: mongo:7 
     volumes: 
-      - ./data:/data/db  # Corrected volume mapping
+      - mongodb_data:/data/db  
     ports:
       - "27017:27017"
+
+volumes:
+  mongodb_data:

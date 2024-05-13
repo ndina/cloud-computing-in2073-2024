@@ -1,21 +1,16 @@
 version: '3'
 services:
-  server:
+  main:
     build: .
-    image: dina2505/cloudcomputing:latest
+    image: dina2505/cloudcomputing
     depends_on:
-      - mongodb
-    ports:
-      - "3030:3030"
+      - "mongodb"
     environment:
       - DATABASE_URI=mongodb://mongodb:27017
+    ports:
+      - "3030:3030"
 
   mongodb:
-    image: mongo:7 
-    volumes: 
-      - mongodb_data:/data/db  
+    image: mongo:7
     ports:
       - "27017:27017"
-
-volumes:
-  mongodb_data:

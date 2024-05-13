@@ -63,7 +63,7 @@ type Template struct {
 // https://pkg.go.dev/text/template
 func loadTemplates() *Template {
 	return &Template{
-		tmpl: template.Must(template.ParseGlob("../views/*.html")),
+		tmpl: template.Must(template.ParseGlob("/app/views/*.html")),
 	}
 }
 

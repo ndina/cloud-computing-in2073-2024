@@ -359,15 +359,27 @@ func deleteBookRequest(c echo.Context, coll *mongo.Collection) error {
 
 
 func main() {
-	// Connect to the database. Such defer keywords are used once the local
-	// context returns; for this case, the local context is the main function
-	// By user defer function, we make sure we don't leave connections
-	// dangling despite the program crashing. Isn't this nice? :D
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	uri := os.Getenv("DATABASE_URI")
+	if len(uri) == 0 {
+		fmt.Printf("failure to load env variable\n")
+		os.Exit(1)
+	}
+
 	// TODO: make sure to pass the proper username, password, and port
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://mongodb:27017"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	if err != nil {
+		fmt.Printf("failed to create client for MongoDB\n")
+		os.Exit(1)
+	}
+
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		fmt.Printf("failed to connect to MongoDB, please make sure the database is running\n")
+		os.Exit(1)
+	}
 
 	// This is another way to specify the call of a function. You can define inline
 	// functions (or anonymous functions, similar to the behavior in Python)

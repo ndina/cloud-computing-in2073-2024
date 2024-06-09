@@ -15,7 +15,7 @@ services:
       - delete_service
 
   web_service:
-    build: ./web
+    image: dina2505/homepage_service:latest
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
@@ -24,7 +24,7 @@ services:
       - mongodb
 
   get_service:
-    build: ./api/books/get
+    image: dina2505/get_service:latest
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
@@ -33,7 +33,7 @@ services:
       - mongodb
 
   post_service:
-    build: ./api/books/post
+    image: dina2505/post_service:latest
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
@@ -42,7 +42,7 @@ services:
       - mongodb
 
   put_service:
-    build: ./api/books/put
+    image: dina2505/put_service:latest
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
@@ -51,7 +51,7 @@ services:
       - mongodb
 
   delete_service:
-    build: ./api/books/delete
+    image: dina2505/delete_service:latest
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:

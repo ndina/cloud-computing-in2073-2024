@@ -19,7 +19,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8084:80"
+      - "8084:8084"  # Update to match the port web_service is listening on
     depends_on:
       - mongodb
 
@@ -28,7 +28,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - mongodb
 
@@ -37,7 +37,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8081:80"
+      - "8081:8081"
     depends_on:
       - mongodb
 
@@ -46,7 +46,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8082:80"
+      - "8082:8082"
     depends_on:
       - mongodb
 
@@ -55,7 +55,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8083:80"
+      - "8083:8083"
     depends_on:
       - mongodb
 

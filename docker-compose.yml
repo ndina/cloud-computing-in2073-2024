@@ -19,7 +19,7 @@ services:
     environment:
       - MONGO_URI=mongodb://mongodb:27017
     ports:
-      - "8084:8084"  # Update to match the port web_service is listening on
+      - "8084:8084"  
     depends_on:
       - mongodb
 

@@ -1,16 +1,70 @@
-version: '3'
+version: '3.8'
+
 services:
-  main:
-    build: .
-    image: dina2505/cloudcomputing
-    depends_on:
-      - "mongodb"
-    environment:
-      - DATABASE_URI=mongodb://mongodb:27017
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
     ports:
-      - "3030:3030"
+      - "80:80"
+    depends_on:
+      - web_service
+      - get_service
+      - post_service
+      - put_service
+      - delete_service
+
+  web_service:
+    build: ./web
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    ports:
+      - "8084:80"
+    depends_on:
+      - mongodb
+
+  get_service:
+    build: ./api/books/get
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    ports:
+      - "8080:80"
+    depends_on:
+      - mongodb
+
+  post_service:
+    build: ./api/books/post
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    ports:
+      - "8081:80"
+    depends_on:
+      - mongodb
+
+  put_service:
+    build: ./api/books/put
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    ports:
+      - "8082:80"
+    depends_on:
+      - mongodb
+
+  delete_service:
+    build: ./api/books/delete
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    ports:
+      - "8083:80"
+    depends_on:
+      - mongodb
 
   mongodb:
     image: mongo:7
     ports:
       - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

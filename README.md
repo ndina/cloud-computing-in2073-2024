@@ -1,80 +1,177 @@
-## Exercise 1 for Cloud Computing ##
 
-### Summer Semester 2024 ###
+# Cloud Computing Course Project at TUM
 
-#### More enquiries, please contact me ####
+This repository contains the project for the Cloud Computing course at the Technical University of Munich (TUM). The project demonstrates the use of Docker and Docker Compose to build, deploy, and manage microservices in a cloud environment.
 
-Dear students, 
+## Project Structure
 
-Let's embark in this journey exploring the development of a simple, yet very dynamic webpage. During this time, we will combine cloud standard technologies (Golang) and emerging ones (HTMX) to discover what it takes to deploy an application in the Cloud. From a simple binary running to using FaaS for efficiency and cost optimization.
+The project is organized into the following directories:
 
-In this first week, we will explore developing certain views using templating and content swap in the browser. All the heavy-lifting is done by HTMX, you just need to adjust the contents and attributes of the *HTML tags* to signal how it should react.
+```
+/my_project
+├── api
+│   └── books
+│       ├── get
+│       │   ├── main.go
+│       │   └── Dockerfile
+│       ├── post
+│       │   ├── main.go
+│       │   └── Dockerfile
+│       ├── put
+│       │   ├── main.go
+│       │   └── Dockerfile
+│       └── delete
+│           ├── main.go
+│           └── Dockerfile
+├── web
+│   ├── main.go
+│   ├── Dockerfile
+│   ├── views
+│   │   ├── index.html
+│   │   ├── authors.html
+│   │   ├── years.html
+│   │   └── search-bar.html
+│   └── css
+│       └── styles.css
+├── nginx
+│   └── nginx.conf
+├── docker-compose.yml
+├── go.mod
+└── go.sum
+```
 
-In this code, there is already quite a bit of examples on how you can do it: from the usage of templates, rendering upon request, to interacting with the database to maintain your data.
+## Services
 
-In the topic of database: there is a bunch of different databases, as there is *database engines*. For simplicity, we will use a NoSQL database called MongoDB. Why NoSQL? Well, the name implies Non-relational database, i.e., here we don't care that much about those peski relations between tables, and foreing keys, and all that technical jargon. Basically, MongoDB works like a big storage for "JSON" documents (or more known as Key-value stores a.k.a KV-stores). That means, for this exercise, we want something simple yet standard in Cloud environments, just to get dabble with them and explore what we can do.
+### NGINX
 
-### What is the task? ###
+The NGINX service acts as a reverse proxy, routing traffic to the appropriate microservice based on the HTTP request method.
 
-As you have seen from the exercise slides or recording, we will be exploring developing a web-front for a Book Store. For this task, you will need to complete:
+### Web Service
 
-1. Finish the implementation for the "Authors" view by: implementing the HTML template, and rendering the content upon a request to `/authors`
-2. Finish the implementation for the "Years" view by: implementing the HTML template, and rendering the content upon a request to `/years`
-3. Implement the methods for:
+The Web Service serves the web application, providing HTML pages for the user interface.
 
-    3.1. `GET`. The request path should be `/api/books`, and it should return an array of objects, in the following form:
+### API Services
 
-        response = {
-                id: "asd34343",
-                name: "The book name",
-                author: "The book author",
-                pages: 1000,
-                year: 1900,
-                isbn: "900-01-45-2222" // this field is optional
+#### GET Service
+
+Handles HTTP GET requests to retrieve book information.
+
+#### POST Service
+
+Handles HTTP POST requests to create new book entries.
+
+#### PUT Service
+
+Handles HTTP PUT requests to update existing book entries.
+
+#### DELETE Service
+
+Handles HTTP DELETE requests to remove book entries.
+
+### MongoDB
+
+A MongoDB instance is used to store book information.
+
+## Setup and Running the Project
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Steps to Build and Run the Project
+
+1. **Clone the Repository**
+
+```sh
+git clone <repository-url>
+cd my_project
+```
+
+2. **Build and Start the Containers**
+
+```sh
+docker-compose up --build
+```
+
+This command will build the Docker images for each service and start the containers.
+
+3. **Access the Application**
+
+- NGINX: [http://localhost](http://localhost)
+- Web Service: [http://localhost](http://localhost)
+- API Endpoints:
+  - `GET /api/books`
+  - `POST /api/books`
+  - `PUT /api/books`
+  - `DELETE /api/books/:id`
+
+You can use tools like `curl` or Postman to test the API endpoints.
+
+### Testing the API
+
+Example using `curl` to test the GET endpoint:
+
+```sh
+curl -X GET http://localhost/api/books
+```
+
+## Configuration
+
+### NGINX Configuration
+
+The NGINX configuration file is located at `nginx/nginx.conf` and routes traffic based on the request methods.
+
+```nginx
+events {}
+
+http {
+    server {
+        listen 80;
+
+        location /api/books {
+            if ($request_method = GET) {
+                proxy_pass http://get_service:80;
+            }
+            if ($request_method = POST) {
+                proxy_pass http://post_service:80;
+            }
+            if ($request_method = PUT) {
+                proxy_pass http://put_service:80;
+            }
+            if ($request_method = DELETE) {
+                proxy_pass http://delete_service:80;
+            }
         }
 
-    3.2. `POST`. The request path should be `/api/books`, and it should return the status code 200 upon **correct** completion. The body of the request looks as follows: 
-
-        request.body = {
-                name: "The book name",
-                author: "The book author",
-                pages: 1000,
-                year: 1900,
-                isbn: "900-01-45-2222" // this field is optional
+        location / {
+            proxy_pass http://web_service:80;
         }
+    }
+}
+```
 
-    3.3 `UPDATE`. The request path should be `/api/books`, and it should return the status code 200 upon **correct** completion. The body of the request looks as follows:
+### Environment Variables
 
-        request.body = {
-                id: "asd34343",
-                name: "The book name",
-                author: "The book author",
-                pages: 1000,
-                year: 1900,
-                isbn: "900-01-45-2222" // this field is optional
-        }
+Each service connects to MongoDB using the `MONGO_URI` environment variable, which is set in the `docker-compose.yml` file:
 
-    3.4 `DELETE`. The request path should be `/api/books/:id`, and it should return the status code 200 upon **correct** deletion of the respective book. In this context, `:id` is known as a path parameter, and common HTTP server frameworks (like the one we are using), supports parsing such parameter to the point you can easily access it. The value for `:id` is the key `id` from previous responses.
+```yaml
+environment:
+  - MONGO_URI=mongodb://mongodb:27017
+```
 
-    3.5 We will make **six** tests to these endpoints with random (but stable data) to make sure the workflow is correct. If everything is correct, together with the rendering functionality, you will achieve 100 points. Remember that you need **70 %** to pass each assignment.
+## Contributing
 
+If you wish to contribute to this project, please fork the repository and submit a pull request with your changes.
 
-### What do you need for this assignment? ###
+## License
 
-Basically, only one thing: **Golang 1.22**. You can download and install it following [these](https://go.dev/doc/install) instructions.
+This project is licensed under the MIT License.
 
-Once downloaded and installed, under the exercise folder, run the following commands:
+## Contact
 
-> go mod tidy // it will automatically download all dependencies specified in go.mod and go.sum
+For any inquiries, please contact the course instructor or the project maintainer.
 
-> go run main.go // it will launch the server and let you access it via localhost:3030
+---
 
-To build your binary, you can perform the following command:
-
-> go build -o <out_filename>
-
-The other component you need to run your exercise is a database. Since we are using MongoDB, you can installing following the instructions [here](https://www.mongodb.com/docs/v7.0/administration/install-community/). I recommend you use MongoDB CE v.7. Moreover, you will also have to change the MongoDB host inside [main.go](cmd/main.go#L184). Remember that you must also specify an username and password when installing MongoDB. In my case, I chose `mongodb` as user, and `testmongo` as password. The port in the [URI](https://en.wikipedia.org/wiki/Uniform_Resource_Identifier) must be also replace to match your system.
-
-Without further ado,
-
-#### Happy Coding! ####
+This README file provides an overview of the project, setup instructions, and relevant configurations. Feel free to modify it to better suit your needs.

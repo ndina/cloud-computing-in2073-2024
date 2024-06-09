@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"log"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"

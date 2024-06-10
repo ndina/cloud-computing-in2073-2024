@@ -17,7 +17,7 @@ services:
     environment:
       - DATABASE_URI=mongodb://mongodb:27017
     ports:
-      - "8084:8084"  
+      - "8084:8084"
     depends_on:
       - mongodb
 
@@ -63,6 +63,11 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo-data:

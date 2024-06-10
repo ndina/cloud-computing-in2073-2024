@@ -107,7 +107,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	uri := os.Getenv("MONGO_URI")
+	uri := os.Getenv("DATABASE_URI")
 	if len(uri) == 0 {
 		fmt.Printf("failure to load env variable\n")
 		os.Exit(1)

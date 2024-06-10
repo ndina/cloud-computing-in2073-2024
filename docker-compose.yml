@@ -17,7 +17,7 @@ services:
   web_service:
     image: dina2505/homepage_service:latest
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URI=mongodb://mongodb:27017
     ports:
       - "8084:8084"  
     depends_on:
@@ -26,7 +26,7 @@ services:
   get_service:
     image: dina2505/get_service:latest
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URI=mongodb://mongodb:27017
     ports:
       - "8080:8080"
     depends_on:
@@ -35,7 +35,7 @@ services:
   post_service:
     image: dina2505/post_service:latest
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URI=mongodb://mongodb:27017
     ports:
       - "8081:8081"
     depends_on:
@@ -44,7 +44,7 @@ services:
   put_service:
     image: dina2505/put_service:latest
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URI=mongodb://mongodb:27017
     ports:
       - "8082:8082"
     depends_on:
@@ -53,7 +53,7 @@ services:
   delete_service:
     image: dina2505/delete_service:latest
     environment:
-      - MONGO_URI=mongodb://mongodb:27017
+      - DATABASE_URI=mongodb://mongodb:27017
     ports:
       - "8083:8083"
     depends_on:

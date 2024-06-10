@@ -153,11 +153,11 @@ http {
 
 ### Environment Variables
 
-Each service connects to MongoDB using the `MONGO_URI` environment variable, which is set in the `docker-compose.yml` file:
+Each service connects to MongoDB using the `DATABASE_URI` environment variable, which is set in the `docker-compose.yml` file:
 
 ```yaml
 environment:
-  - MONGO_URI=mongodb://mongodb:27017
+  - DATABASE_URI=mongodb://mongodb:27017
 ```
 
 ## Contributing

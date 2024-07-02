@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delete-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delete-service
+  template:
+    metadata:
+      labels:
+        app: delete-service
+    spec:
+      containers:
+      - name: delete-service
+        image: dina2505/delete_service:latest
+        ports:
+        - containerPort: 8080

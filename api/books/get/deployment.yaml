@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: get-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: get-service
+  template:
+    metadata:
+      labels:
+        app: get-service
+    spec:
+      containers:
+      - name: get-service
+        image: dina2505/get_service:latest
+        ports:
+        - containerPort: 8080

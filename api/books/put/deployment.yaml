@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: put-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: put-service
+  template:
+    metadata:
+      labels:
+        app: put-service
+    spec:
+      containers:
+      - name: put-service
+        image: dina2505/put_service:latest
+        ports:
+        - containerPort: 8080

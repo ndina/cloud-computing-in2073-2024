@@ -160,18 +160,6 @@ environment:
   - DATABASE_URI=mongodb://mongodb:27017
 ```
 
-## Contributing
-
-If you wish to contribute to this project, please fork the repository and submit a pull request with your changes.
-
-## License
-
-This project is licensed under the MIT License.
-
 ## Contact
 
 For any inquiries, please contact the course instructor or the project maintainer.
-
----
-
-This README file provides an overview of the project, setup instructions, and relevant configurations. Feel free to modify it to better suit your needs.
